@@ -6,11 +6,13 @@
 .photo-div {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .individual-photo-div {
   flex-basis: calc(33.33% - 1.5rem);
-  margin: 10px;
+  margin: 0.7rem;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -73,16 +75,82 @@ span {
   color: white;
   margin: 0.5rem;
   margin-bottom: 1.5rem;
+  transition: box-shadow 0.2s;
+}
+
+.favorite:hover {
+  box-shadow: 1px 1px 6px black;
+}
+
+.favorite:active {
+  box-shadow: inset 2px 2px 2px black;
 }
 
 .individual-photo-div.favored .favorite {
   background-color: rgba(255, 255, 255, 0.301);
 }
 
-@media only screen and (min-width: 601px) and (max-width: 1024px) {
-    /* Your tablet styles here */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@media only screen and (max-width: 600px) {
-    /* Your mobile styles here */
+.loading > p {
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+@media only screen and (max-width: 1024px) {
+  .individual-photo-div {
+    flex-basis: calc(45% - 1rem);
+  }
+
+  .fetched-photo,
+  .overlay {
+    width: 18.6rem;
+    height: 12.4rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .fetched-photo,
+  .overlay {
+    width: 15rem;
+    height: 10rem;
+  }
+
+  .image-name,
+  .photographer,
+  .favorite {
+    font-size: 0.8rem;
+  }
+}
+
+@media only screen and (max-width: 652px) {
+  .fetched-photo,
+  .overlay {
+    width: 24rem;
+    height: 16rem;
+  }
+
+  .image-name,
+  .photographer,
+  .favorite {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .fetched-photo,
+  .overlay {
+    width: 16rem;
+    height: 10.5rem;
+  }
+
+  .image-name,
+  .photographer,
+  .favorite {
+    font-size: 0.8rem;
+  }
 }

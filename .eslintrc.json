@@ -19,6 +19,8 @@
       "react/react-in-jsx-scope": "off",
       "import/no-unresolved": "off",
       "no-shadow": "off",
+      "react/no-array-index-key": "off",
+    "react/jsx-no-bind": "off",
       "max-len": ["error", { "code": 120 }]
     },
     "overrides": [

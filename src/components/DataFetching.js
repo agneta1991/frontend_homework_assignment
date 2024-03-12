@@ -1,30 +1,19 @@
-/* eslint-disable */
-import React, { useState, useEffect, lazy, Suspense } from "react";
-import { createClient } from "pexels";
-import "./style.css";
+import React, {
+  useState, useEffect, lazy, Suspense,
+} from 'react';
+import { createClient } from 'pexels';
+import './style.css';
 
 const client = createClient(
-  "4OAmJyKKYPC5TjyMccAlpF7NlE94KeZgGZQ2v3QKZvG4zxicgiEU5jJH"
+  '4OAmJyKKYPC5TjyMccAlpF7NlE94KeZgGZQ2v3QKZvG4zxicgiEU5jJH',
 );
 
-const LazyImage = lazy(() => import("./LazyLoad"));
+const LazyImage = lazy(() => import('./LazyLoad'));
 
-const Photo = ({ photo, favorites, handleFavoriteClick, capitaliseName }) => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <LazyImage
-      photo={photo}
-      favorites={favorites}
-      handleFavoriteClick={handleFavoriteClick}
-      capitaliseName={capitaliseName}
-    />
-  </Suspense>
-);
-
-const DisplayData = () => {
+const useFetchPhotos = () => {
   const [photos, setPhotos] = useState([]);
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [favorites, setFavorites] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -32,32 +21,29 @@ const DisplayData = () => {
       try {
         const response = await client.photos.curated({ page, per_page: 80 });
         setPhotos((prevPhotos) => [...prevPhotos, ...response.photos]);
-        setPage((prevPage) => prevPage + 1);
       } catch (error) {
-        console.error("Error fetching photos:", error);
+        console.error('Error fetching photos:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      ) {
-        fetchPhotos();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    fetchPhotos();
   }, [page]);
 
+  return {
+    photos,
+    loading,
+    page,
+    setPage,
+  };
+};
+
+const useFavorites = () => {
+  const [favorites, setFavorites] = useState([]);
+
   useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     setFavorites(storedFavorites);
   }, []);
 
@@ -68,36 +54,66 @@ const DisplayData = () => {
       ? favorites.filter((favoriteId) => favoriteId !== id)
       : [...favorites, id];
 
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
     setFavorites(updatedFavorites);
   };
 
+  return { favorites, handleFavoriteClick };
+};
+
+const DisplayData = () => {
+  const {
+    photos, loading, page, setPage,
+  } = useFetchPhotos();
+  const { favorites, handleFavoriteClick } = useFavorites();
+
   function capitaliseName(name) {
-    const fullName = name.split(" ");
+    const fullName = name.split(' ');
     const capitaliseFullName = fullName.map(
-      (fullName) => fullName.charAt(0).toUpperCase() + fullName.slice(1)
+      (fullName) => fullName.charAt(0).toUpperCase() + fullName.slice(1),
     );
 
-    return capitaliseFullName.join(" ");
+    return capitaliseFullName.join(' ');
   }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop
+          === document.documentElement.offsetHeight
+        && !loading
+      ) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [loading, setPage]);
 
   return (
     <div className="photo-div">
-      {photos.map((photo) => (
-        <Photo
-          key={photo.id}
-          photo={photo}
-          favorites={favorites}
-          handleFavoriteClick={handleFavoriteClick}
-          capitaliseName={capitaliseName}
-        />
-      ))}
-      {loading && <div>Loading...</div>}
+      <Suspense fallback={<div>Loading...</div>}>
+        {photos.map((photo, index) => (
+          <LazyImage
+            key={`photo_${photo.id}_page_${page}_${index}`}
+            photo={photo}
+            favorites={favorites}
+            handleFavoriteClick={handleFavoriteClick}
+            capitaliseName={capitaliseName}
+          />
+        ))}
+      </Suspense>
+      {loading && (
+        <div className="loading">
+          <p>Loading...</p>
+        </div>
+      )}
     </div>
   );
 };
 
 export default DisplayData;
-
-
-// eslint-enable
