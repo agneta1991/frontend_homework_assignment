@@ -1,6 +1,5 @@
 /* eslint-disable */
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { createClient } from "pexels";
 import "./style.css";
 
@@ -8,22 +7,54 @@ const client = createClient(
   "4OAmJyKKYPC5TjyMccAlpF7NlE94KeZgGZQ2v3QKZvG4zxicgiEU5jJH"
 );
 
+const LazyImage = lazy(() => import("./LazyLoad"));
+
+const Photo = ({ photo, favorites, handleFavoriteClick, capitaliseName }) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <LazyImage
+      photo={photo}
+      favorites={favorites}
+      handleFavoriteClick={handleFavoriteClick}
+      capitaliseName={capitaliseName}
+    />
+  </Suspense>
+);
+
 const DisplayData = () => {
   const [photos, setPhotos] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const fetchPhotos = async () => {
+      setLoading(true);
       try {
-        const response = await client.photos.curated({ page: 1, per_page: 80 });
-        setPhotos(response.photos);
+        const response = await client.photos.curated({ page, per_page: 80 });
+        setPhotos((prevPhotos) => [...prevPhotos, ...response.photos]);
+        setPage((prevPage) => prevPage + 1);
       } catch (error) {
         console.error("Error fetching photos:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchPhotos();
-  }, []);
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        fetchPhotos();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page]);
 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -53,35 +84,20 @@ const DisplayData = () => {
   return (
     <div className="photo-div">
       {photos.map((photo) => (
-        <div
+        <Photo
           key={photo.id}
-          className={`individual-photo-div ${
-            favorites.includes(photo.id) ? "favored" : ""
-          }`}
-        >
-          <img
-            className="fetched-photo"
-            src={photo.src.medium}
-            alt={photo.alt}
-          />
-          <div className="overlay">
-            <p className="image-name">{capitaliseName(photo.alt)}</p>
-            <span />
-            <p className="photographer">{capitaliseName(photo.photographer)}</p>
-
-            <button
-              type="submit"
-              className="favorite"
-              onClick={() => handleFavoriteClick(photo.id)}
-            >
-              Favorite
-            </button>
-          </div>
-        </div>
+          photo={photo}
+          favorites={favorites}
+          handleFavoriteClick={handleFavoriteClick}
+          capitaliseName={capitaliseName}
+        />
       ))}
+      {loading && <div>Loading...</div>}
     </div>
   );
 };
 
 export default DisplayData;
+
+
 // eslint-enable

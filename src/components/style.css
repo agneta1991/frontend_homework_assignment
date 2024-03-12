@@ -78,3 +78,11 @@ span {
 .individual-photo-div.favored .favorite {
   background-color: rgba(255, 255, 255, 0.301);
 }
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    /* Your tablet styles here */
+}
+
+@media only screen and (max-width: 600px) {
+    /* Your mobile styles here */
+}
