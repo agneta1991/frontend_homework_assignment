@@ -59,6 +59,8 @@ The project is a responsive web application that utilizes the Pexels API for ret
 
 - [Click me to view deployed project!](https://frontend-homework-assignment.onrender.com/)
 
+<img src="./src/assets/responsivenss.jpg" alt="Design Preview" width="500">
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 💻 Getting Started <a name="getting-started"></a>
