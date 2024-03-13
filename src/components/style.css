@@ -3,11 +3,34 @@
   font-family: "Hind Siliguri", sans-serif;
 }
 
+.navbar {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #c9c9c980;
+  padding: 0 3rem;
+  box-sizing: border-box;
+  border-radius: 0 0 2rem 2rem;
+  box-shadow: 1px 1px 5px rgb(179, 177, 177);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+}
+
+.pexel-logo {
+  width: 6rem;
+  height: auto;
+  padding: 1rem;
+  padding-bottom: 0.5rem;
+}
+
 .photo-div {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  padding-top: 5rem;
 }
 
 .individual-photo-div {
@@ -33,7 +56,7 @@
   position: absolute;
   width: 24rem;
   height: 16rem;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.319);
   color: white;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -76,6 +99,13 @@ span {
   margin: 0.5rem;
   margin-bottom: 1.5rem;
   transition: box-shadow 0.2s;
+}
+
+.buttons .favorite {
+  margin: 0.7rem;
+  color: black;
+  border: 1px solid black;
+  box-shadow: 1px 1px 1px black;
 }
 
 .favorite:hover {
@@ -145,6 +175,15 @@ span {
   .favorite {
     font-size: 1rem;
   }
+
+  .logo {
+    display: none;
+  }
+
+  .navbar {
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 @media only screen and (max-width: 450px) {
@@ -158,5 +197,28 @@ span {
   .photographer,
   .favorite {
     font-size: 0.6rem;
+  }
+}
+
+@media only screen and (max-width: 352px) {
+  .buttons button {
+    font-size: 0;
+  }
+
+  #back-to-top {
+    background-image: url(https://img.icons8.com/laces/64/circled-up.png);
+  }
+
+  #show-fav {
+    background-image: url(https://img.icons8.com/wired/64/hearts.png);
+  }
+
+  #show-fav,
+  #back-to-top {
+    background-size: 2rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    box-shadow: none;
   }
 }

@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, lazy, Suspense,
 } from 'react';
+import PropTypes from 'prop-types';
 import { createClient } from 'pexels';
 import './style.css';
 
@@ -22,7 +23,8 @@ const useFetchPhotos = () => {
         const response = await client.photos.curated({ page, per_page: 80 });
         setPhotos((prevPhotos) => [...prevPhotos, ...response.photos]);
       } catch (error) {
-        console.error('Error fetching photos:', error);
+        // eslint-disable-next-line
+        console.error("Error fetching photos:", error);
       } finally {
         setLoading(false);
       }
@@ -61,7 +63,7 @@ const useFavorites = () => {
   return { favorites, handleFavoriteClick };
 };
 
-const DisplayData = () => {
+const DisplayData = ({ sortByFavorites }) => {
   const {
     photos, loading, page, setPage,
   } = useFetchPhotos();
@@ -94,10 +96,19 @@ const DisplayData = () => {
     };
   }, [loading, setPage]);
 
+  let renderedPhotos = photos;
+
+  if (sortByFavorites) {
+    renderedPhotos = photos.filter((photo) => favorites.includes(photo.id));
+    renderedPhotos = renderedPhotos.filter(
+      (photo, index, self) => index === self.findIndex((p) => p.id === photo.id),
+    );
+  }
+
   return (
     <div className="photo-div">
       <Suspense fallback={<div>Loading...</div>}>
-        {photos.map((photo, index) => (
+        {renderedPhotos.map((photo, index) => (
           <LazyImage
             key={`photo_${photo.id}_page_${page}_${index}`}
             photo={photo}
@@ -114,6 +125,10 @@ const DisplayData = () => {
       )}
     </div>
   );
+};
+
+DisplayData.propTypes = {
+  sortByFavorites: PropTypes.bool.isRequired,
 };
 
 export default DisplayData;
