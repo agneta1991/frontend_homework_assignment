@@ -111,6 +111,12 @@ span {
     width: 18.6rem;
     height: 12.4rem;
   }
+
+  .image-name,
+  .photographer,
+  .favorite {
+    font-size: 0.8rem;
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -123,7 +129,7 @@ span {
   .image-name,
   .photographer,
   .favorite {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 }
 
@@ -151,6 +157,6 @@ span {
   .image-name,
   .photographer,
   .favorite {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
   }
 }

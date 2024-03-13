@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders DisplayData component 1`] = `
+<DocumentFragment>
+  <div
+    class="photo-div"
+  >
+    <div
+      class="loading"
+    >
+      <p>
+        Loading...
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
