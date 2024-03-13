@@ -6,7 +6,7 @@ import { createClient } from 'pexels';
 import './style.css';
 
 const client = createClient(
-  '4OAmJyKKYPC5TjyMccAlpF7NlE94KeZgGZQ2v3QKZvG4zxicgiEU5jJH',
+  'Cm0QX8g61t18SEMzjVqwsMQGuT6HzpkYe5ikCeNTNmABFfnBaKIeRlU0',
 );
 
 const LazyImage = lazy(() => import('./LazyLoad'));
