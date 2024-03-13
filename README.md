@@ -57,7 +57,7 @@ The project is a responsive web application that utilizes the Pexels API for ret
 
 <br>
 
-- [Click me to view deployed project!](https://space-travellers-hub-c6rz.onrender.com)
+- [Click me to view deployed project!](https://frontend-homework-assignment.onrender.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
